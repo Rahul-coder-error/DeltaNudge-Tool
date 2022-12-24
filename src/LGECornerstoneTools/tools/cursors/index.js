@@ -1,4 +1,4 @@
-import MouseCursor from "./MouseCursor.js";
+import MouseCursor from './MouseCursor.js';
 
 /*
 MACROS:
@@ -178,7 +178,7 @@ export const freehandRoiSculptorCursor = new MouseCursor(
   }
 );
 
-export const DeltaNudgeCursor = new MouseCursor(
+export const deltaNudgeCursor = new MouseCursor(
   `<g id="icon-delta-nudge" fill="none" stroke-width="1.5" stroke="ACTIVE_COLOR" stroke-linecap="round" stroke-linejoin="round">
       <line id="svg_1" y2="2.559367" x2="10.184807" y1="4.467781" x1="8.81711"/>
       <line id="svg_4" y2="1.493836" x2="11.727442" y1="2.766112" x1="10.089386"/>
@@ -429,11 +429,11 @@ const segToolCursorBoundaries = {
   y: 60,
 };
 
-const minusRect = (color = "ACTIVE_COLOR") =>
+const minusRect = (color = 'ACTIVE_COLOR') =>
   `<rect fill="${color}" x="80.19" y="25.03" width="47.14" height="15.85"/>`;
 
 const plusRect = (
-  color = "ACTIVE_COLOR"
+  color = 'ACTIVE_COLOR'
 ) => `<rect fill="${color}" x="80.19" y="25.03" width="47.14" height="15.85"/>
       <rect fill="${color}" x="95.84" y="9.38" width="15.85" height="47.14"/>`;
 

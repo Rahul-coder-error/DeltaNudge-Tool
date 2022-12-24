@@ -1,8 +1,8 @@
-import external from "./../externalModules.js";
-import toolStyle from "./../stateManagement/toolStyle.js";
-import toolColors from "./../stateManagement/toolColors.js";
-import path from "./path.js";
-import { state } from "./../store/index.js";
+import external from './../externalModules.js';
+import toolStyle from './../stateManagement/toolStyle.js';
+import toolColors from './../stateManagement/toolColors.js';
+import path from './path.js';
+import { state } from './../store/index.js';
 
 /**
  * Draws proivded handles to the provided context
@@ -57,8 +57,8 @@ export default function (context, evtDetail, handles, options = {}) {
     path(context, pathOptions, (context) => {
       var handleCanvasCoords;
       if (
-        options.name !== "FreehandSculptorTool" &&
-        options.name !== "DeltaNudgeTool"
+        options.name !== 'FreehandSculptorTool' &&
+        options.name !== 'DeltaNudgeTool'
       ) {
         handleCanvasCoords = external.cornerstone.pixelToCanvas(
           element,

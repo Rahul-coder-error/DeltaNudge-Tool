@@ -1,16 +1,17 @@
-import EVENTS from "../events.js";
-import external from "../externalModules.js";
-import toolColors from "../stateManagement/toolColors.js";
-import drawHandles from "../drawing/drawHandles.js";
-import { state } from "../store/index.js";
-import { getToolState } from "../stateManagement/toolState.js";
-import { clipToBox } from "../util/clip.js";
-import getToolForElement from "../store/getToolForElement.js";
-import BaseTool from "./base/BaseTool.js";
-import { hideToolCursor, setToolCursor } from "../store/setToolCursor.js";
-import { freehandRoiSculptorCursor } from "./cursors/index.js";
+import EVENTS from '../events.js';
+import external from '../externalModules.js';
+import toolColors from '../stateManagement/toolColors.js';
+import drawHandles from '../drawing/drawHandles.js';
+import { state } from '../store/index.js';
+import { getToolState } from '../stateManagement/toolState.js';
+import { clipToBox } from '../util/clip.js';
+import getToolForElement from '../store/getToolForElement.js';
+import BaseTool from './base/BaseTool.js';
+import { hideToolCursor, setToolCursor } from '../store/setToolCursor.js';
+import { freehandRoiSculptorCursor } from './cursors/index.js';
 
-import freehandUtils from "../util/freehand/index.js";
+import freehandUtils from '../util/freehand/index.js';
+import { convertToFalseColorImage } from 'cornerstone-core';
 
 const { FreehandHandleData } = freehandUtils;
 
@@ -26,10 +27,10 @@ const { FreehandHandleData } = freehandUtils;
 export default class FreehandRoiSculptorTool extends BaseTool {
   constructor(props = {}) {
     const defaultProps = {
-      name: "FreehandRoiSculptor",
-      referencedToolName: "FreehandRoi",
-      supportedInteractionTypes: ["Mouse", "Touch", "DoubleTap"],
-      mixins: ["activeOrDisabledBinaryTool"],
+      name: 'FreehandRoiSculptor',
+      referencedToolName: 'FreehandRoi',
+      supportedInteractionTypes: ['Mouse', 'Touch', 'DoubleTap'],
+      mixins: ['activeOrDisabledBinaryTool'],
       configuration: getDefaultFreehandRoiSculptorToolConfiguration(),
       svgCursor: freehandRoiSculptorCursor,
     };
@@ -66,16 +67,16 @@ export default class FreehandRoiSculptorTool extends BaseTool {
     }
 
     if (this._active) {
-      const context = eventData.canvasContext.canvas.getContext("2d");
+      const context = eventData.canvasContext.canvas.getContext('2d');
       var scale =
         external.cornerstone.getEnabledElement(element).viewport.scale;
       const options = {
         color: this.configuration.dragColor,
         fill: null,
         handleRadius: this._toolSizeCanvas / scale,
-        name: "FreehandSculptorTool",
+        name: 'FreehandSculptorTool',
       };
-
+      // console.log('Options Drag = ' + this._toolSizeCanvas);
       drawHandles(
         context,
         eventData,
@@ -209,7 +210,7 @@ export default class FreehandRoiSculptorTool extends BaseTool {
   _renderHoverCursor(evt) {
     const eventData = evt.detail;
     const element = eventData.element;
-    const context = eventData.canvasContext.canvas.getContext("2d");
+    const context = eventData.canvasContext.canvas.getContext('2d');
 
     const toolState = getToolState(element, this.referencedToolName);
     const data = toolState.data[this.configuration.currentTool];
@@ -254,7 +255,7 @@ export default class FreehandRoiSculptorTool extends BaseTool {
       fill: null,
       color: this.configuration.hoverColor,
       handleRadius: radiusCanvas / scale,
-      name: "FreehandSculptorTool",
+      name: 'FreehandSculptorTool',
     };
 
     drawHandles(
@@ -263,7 +264,7 @@ export default class FreehandRoiSculptorTool extends BaseTool {
       this.configuration.mouseLocation.handles,
       options
     );
-
+    // console.log('Options Hover = ' + radiusCanvas);
     if (this.configuration.limitRadiusOutsideRegion) {
       context.globalAlpha = 1.0; // Reset drawing alpha for other draw calls.
     }
@@ -460,7 +461,7 @@ export default class FreehandRoiSculptorTool extends BaseTool {
         pushedHandles.last = i;
       }
     }
-
+    console.log(pushedHandles);
     return pushedHandles;
   }
 
@@ -473,6 +474,9 @@ export default class FreehandRoiSculptorTool extends BaseTool {
    * @returns {void}
    */
   _pushOneHandle(i, distanceToHandle) {
+    // console.log(
+    //   'From Freehand Sculpture for point ' + i + ' = ' + distanceToHandle
+    // );
     const { points, mousePoint, toolSize, image } = this._sculptData;
     const handle = points[i];
 
@@ -485,7 +489,7 @@ export default class FreehandRoiSculptorTool extends BaseTool {
       x: mousePoint.x + toolSize * directionUnitVector.x,
       y: mousePoint.y + toolSize * directionUnitVector.y,
     };
-
+    // console.log('Position = ', position);
     clipToBox(position, image);
 
     handle.x = position.x;
@@ -779,6 +783,8 @@ export default class FreehandRoiSculptorTool extends BaseTool {
       data,
       coords
     );
+    console.log('Radius Image = ' + radiusImage);
+    console.log('Radius Canvas = ' + radiusCanvas);
 
     // Check if should limit maximum size.
     if (config.limitRadiusOutsideRegion) {
@@ -1143,9 +1149,9 @@ export default class FreehandRoiSculptorTool extends BaseTool {
   }
 
   set minSpacing(value) {
-    if (typeof value !== "number") {
+    if (typeof value !== 'number') {
       throw new Error(
-        "Attempting to set freehandSculpter minSpacing to a value other than a number."
+        'Attempting to set freehandSculpter minSpacing to a value other than a number.'
       );
     }
 
@@ -1157,9 +1163,9 @@ export default class FreehandRoiSculptorTool extends BaseTool {
   }
 
   set maxSpacing(value) {
-    if (typeof value !== "number") {
+    if (typeof value !== 'number') {
       throw new Error(
-        "Attempting to set freehandSculpter maxSpacing to a value other than a number."
+        'Attempting to set freehandSculpter maxSpacing to a value other than a number.'
       );
     }
 
@@ -1171,9 +1177,9 @@ export default class FreehandRoiSculptorTool extends BaseTool {
   }
 
   set showCursorOnHover(value) {
-    if (typeof value !== "boolean") {
+    if (typeof value !== 'boolean') {
       throw new Error(
-        "Attempting to set freehandSculpter showCursorOnHover to a value other than a boolean."
+        'Attempting to set freehandSculpter showCursorOnHover to a value other than a boolean.'
       );
     }
 
@@ -1186,9 +1192,9 @@ export default class FreehandRoiSculptorTool extends BaseTool {
   }
 
   set limitRadiusOutsideRegion(value) {
-    if (typeof value !== "boolean") {
+    if (typeof value !== 'boolean') {
       throw new Error(
-        "Attempting to set freehandSculpter limitRadiusOutsideRegion to a value other than a boolean."
+        'Attempting to set freehandSculpter limitRadiusOutsideRegion to a value other than a boolean.'
       );
     }
 
@@ -1201,9 +1207,9 @@ export default class FreehandRoiSculptorTool extends BaseTool {
   }
 
   set hoverCursorFadeAlpha(value) {
-    if (typeof value !== "number") {
+    if (typeof value !== 'number') {
       throw new Error(
-        "Attempting to set freehandSculpter hoverCursorFadeAlpha to a value other than a number."
+        'Attempting to set freehandSculpter hoverCursorFadeAlpha to a value other than a number.'
       );
     }
 
@@ -1219,9 +1225,9 @@ export default class FreehandRoiSculptorTool extends BaseTool {
   }
 
   set hoverCursorFadeDistance(value) {
-    if (typeof value !== "number") {
+    if (typeof value !== 'number') {
       throw new Error(
-        "Attempting to set freehandSculpter hoverCursorFadeDistance to a value other than a number."
+        'Attempting to set freehandSculpter hoverCursorFadeDistance to a value other than a number.'
       );
     }
 
@@ -1265,7 +1271,7 @@ function getDefaultFreehandRoiSculptorToolConfiguration() {
     showCursorOnHover: true,
     limitRadiusOutsideRegion: true,
     hoverCursorFadeAlpha: 0.5,
-    hoverCursorFadeDistance: 1.2,
+    hoverCursorFadeDistance: 0.2,
   };
 }
 
